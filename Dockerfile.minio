@@ -1,0 +1,11 @@
+FROM minio/minio:latest
+
+ENV MINIO_ROOT_USER=budgetgen
+ENV MINIO_ROOT_PASSWORD=budgetgen123
+
+VOLUME ["/data"]
+
+EXPOSE 9000
+EXPOSE 9001
+
+CMD ["server", "/data", "--console-address", ":9001"]

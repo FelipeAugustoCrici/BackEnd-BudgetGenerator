@@ -20,11 +20,15 @@ func main() {
 
 	r := gin.Default()
 	r.Use(corsMiddleware())
+	r.GET("/health", func(c *gin.Context) { c.JSON(200, gin.H{"status": "ok"}) })
 
 	r.POST("/auth/register", authhandler.Register)
 	r.POST("/auth/login", authhandler.Login)
 
-	port := os.Getenv("AUTH_PORT")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = os.Getenv("AUTH_PORT")
+	}
 	if port == "" {
 		port = "9001"
 	}

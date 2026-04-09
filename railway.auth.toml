@@ -1,0 +1,8 @@
+[build]
+dockerfile = "Dockerfile.auth"
+
+[deploy]
+startCommand = "./auth-server"
+healthcheckPath = "/health"
+healthcheckTimeout = 30
+restartPolicyType = "on_failure"

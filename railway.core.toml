@@ -1,0 +1,8 @@
+[build]
+dockerfile = "Dockerfile.core"
+
+[deploy]
+startCommand = "./core-server"
+healthcheckPath = "/health"
+healthcheckTimeout = 30
+restartPolicyType = "on_failure"
