@@ -54,7 +54,8 @@ Regras:
 - Extraia o nome do cliente do prompt se mencionado
 - Divida o trabalho em atividades específicas e realistas
 - Use as horas estimadas mencionadas pelo usuário, distribuindo entre as atividades
-- O campo hourlyRate deixe como 0 (o usuário vai preencher)
+- Se o usuário mencionar valor por hora (ex: "R$ 50/hora", "cobrar 90 a hora", "50 reais por hora"), extraia e coloque em hourlyRate como número
+- Se não mencionar valor por hora, deixe hourlyRate como 0
 - Responda APENAS com o JSON, sem texto adicional, sem markdown, sem blocos de código`
 
 func GenerateQuote(c *gin.Context) {
