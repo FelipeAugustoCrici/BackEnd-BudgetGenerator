@@ -45,6 +45,7 @@ func main() {
 		api.PUT("/settings", corehandler.UpsertSettings)
 
 		api.POST("/upload", corehandler.Upload)
+		api.POST("/ai/quote", corehandler.GenerateQuote)
 	}
 
 	port := os.Getenv("PORT")
