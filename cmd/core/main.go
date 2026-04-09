@@ -46,6 +46,7 @@ func main() {
 
 		api.POST("/upload", corehandler.Upload)
 		api.POST("/upload/presign", corehandler.PresignUpload)
+		api.GET("/image-proxy", corehandler.ImageProxy)
 		api.POST("/ai/quote", corehandler.GenerateQuote)
 	}
 
