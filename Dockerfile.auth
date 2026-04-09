@@ -3,17 +3,14 @@ WORKDIR /app
 
 RUN apk add --no-cache git ca-certificates
 
-COPY go.mod ./
-
 ENV GONOSUMDB=*
 ENV GOFLAGS=-mod=mod
 ENV CGO_ENABLED=0
-
-RUN go mod download -x || true
+ENV GOPATH=/go
 
 COPY . .
 
-RUN go mod tidy -e && go build -ldflags="-w -s" -o auth-server ./cmd/auth
+RUN go mod tidy && go build -ldflags="-w -s" -o auth-server ./cmd/auth
 
 FROM alpine:3.19
 RUN apk add --no-cache ca-certificates
