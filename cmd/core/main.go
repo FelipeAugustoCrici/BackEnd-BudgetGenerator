@@ -45,6 +45,7 @@ func main() {
 		api.PUT("/settings", corehandler.UpsertSettings)
 
 		api.POST("/upload", corehandler.Upload)
+		api.POST("/upload/presign", corehandler.PresignUpload)
 		api.POST("/ai/quote", corehandler.GenerateQuote)
 	}
 
