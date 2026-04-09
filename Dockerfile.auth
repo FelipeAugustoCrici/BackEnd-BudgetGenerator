@@ -1,0 +1,16 @@
+FROM golang:1.23-alpine AS builder
+WORKDIR /app
+
+RUN apk add --no-cache git
+
+COPY go.mod ./
+RUN go mod download || true
+
+COPY . .
+RUN go mod tidy && go build -o auth-server ./cmd/auth 2>&1
+
+FROM alpine:3.19
+WORKDIR /app
+COPY --from=builder /app/auth-server .
+EXPOSE 9001
+CMD ["./auth-server"]

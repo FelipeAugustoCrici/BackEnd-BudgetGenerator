@@ -1,0 +1,17 @@
+FROM golang:1.23-alpine AS builder
+WORKDIR /app
+
+# Install git (needed for go mod tidy with some deps)
+RUN apk add --no-cache git
+
+COPY go.mod ./
+RUN go mod download || true
+
+COPY . .
+RUN go mod tidy && go build -o core-server ./cmd/core 2>&1
+
+FROM alpine:3.19
+WORKDIR /app
+COPY --from=builder /app/core-server .
+EXPOSE 9000
+CMD ["./core-server"]

@@ -1,0 +1,74 @@
+services:
+  auth:
+    build:
+      context: .
+      dockerfile: Dockerfile.auth
+    ports:
+      - "9001:9001"
+    environment:
+      DATABASE_URL: postgres://budgetgen:budgetgen@postgres:5432/budgetgen?sslmode=disable
+      JWT_SECRET: change-this-secret-in-production
+      AUTH_PORT: 9001
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  core:
+    build:
+      context: .
+      dockerfile: Dockerfile.core
+    ports:
+      - "9000:9000"
+    environment:
+      DATABASE_URL: postgres://budgetgen:budgetgen@postgres:5432/budgetgen?sslmode=disable
+      JWT_SECRET: change-this-secret-in-production
+      CORE_PORT: 9000
+      MINIO_ENDPOINT: minio:9002
+      MINIO_ACCESS_KEY: budgetgen
+      MINIO_SECRET_KEY: budgetgen123
+      MINIO_BUCKET: uploads
+      MINIO_PUBLIC_URL: http://localhost:9002
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    ports:
+      - "9002:9002"
+      - "9003:9003"
+    environment:
+      MINIO_ROOT_USER: budgetgen
+      MINIO_ROOT_PASSWORD: budgetgen123
+    command: server /data --address ":9002" --console-address ":9003"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9002/minio/health/live"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: budgetgen
+      POSTGRES_PASSWORD: budgetgen
+      POSTGRES_DB: budgetgen
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U budgetgen"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  minio_data:
