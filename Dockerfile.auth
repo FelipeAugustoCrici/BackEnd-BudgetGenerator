@@ -3,11 +3,15 @@ WORKDIR /app
 
 RUN apk add --no-cache git
 
-COPY go.mod ./
-RUN go mod download || true
+ENV GONOSUMCHECK=*
+ENV GOFLAGS=-mod=mod
+ENV GONOSUMDB=*
+ENV GOFLAGS=-mod=mod
 
+COPY go.mod ./
 COPY . .
-RUN go mod tidy && go build -o auth-server ./cmd/auth 2>&1
+
+RUN go mod tidy && go build -o auth-server ./cmd/auth
 
 FROM alpine:3.19
 WORKDIR /app
