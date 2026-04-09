@@ -1,7 +1,6 @@
 package corehandler
 
 import (
-	"io"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
