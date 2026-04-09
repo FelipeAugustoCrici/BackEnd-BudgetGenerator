@@ -1,18 +1,22 @@
 FROM golang:1.23-alpine AS builder
 WORKDIR /app
 
-RUN apk add --no-cache git
-
-ENV GONOSUMCHECK=*
-ENV GOFLAGS=-mod=mod
-ENV GONOSUMDB=*
+RUN apk add --no-cache git ca-certificates
 
 COPY go.mod ./
+
+ENV GONOSUMDB=*
+ENV GOFLAGS=-mod=mod
+ENV CGO_ENABLED=0
+
+RUN go mod download -x || true
+
 COPY . .
 
-RUN go mod tidy && go build -o core-server ./cmd/core
+RUN go mod tidy -e && go build -ldflags="-w -s" -o core-server ./cmd/core
 
 FROM alpine:3.19
+RUN apk add --no-cache ca-certificates
 WORKDIR /app
 COPY --from=builder /app/core-server .
 EXPOSE 9000
