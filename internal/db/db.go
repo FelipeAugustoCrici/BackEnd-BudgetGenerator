@@ -29,6 +29,9 @@ func Connect() {
 		&model.Quote{},
 		&model.Template{},
 		&model.Settings{},
+		&model.Client{},
+		&model.Contract{},
+		&model.ContractEvent{},
 	)
 	if err != nil {
 		log.Fatalf("failed to migrate: %v", err)

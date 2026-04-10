@@ -7,6 +7,7 @@ import (
 	"budgetgen/internal/auth"
 	"budgetgen/internal/db"
 	"budgetgen/internal/handler/corehandler"
+	"budgetgen/internal/handler/crmhandler"
 	"budgetgen/internal/storage"
 
 	"github.com/gin-gonic/gin"
@@ -48,6 +49,25 @@ func main() {
 		api.POST("/upload/presign", corehandler.PresignUpload)
 		api.GET("/image-proxy", corehandler.ImageProxy)
 		api.POST("/ai/quote", corehandler.GenerateQuote)
+
+		// CRM - Clients
+		api.GET("/clients", crmhandler.ListClients)
+		api.POST("/clients", crmhandler.CreateClient)
+		api.GET("/clients/:id", crmhandler.GetClient)
+		api.PUT("/clients/:id", crmhandler.UpdateClient)
+		api.DELETE("/clients/:id", crmhandler.DeleteClient)
+
+		// CRM - Contracts
+		api.GET("/contracts", crmhandler.ListContracts)
+		api.POST("/contracts", crmhandler.CreateContract)
+		api.GET("/contracts/:id", crmhandler.GetContract)
+		api.PUT("/contracts/:id", crmhandler.UpdateContract)
+		api.POST("/contracts/:id/send", crmhandler.SendContract)
+		api.POST("/contracts/:id/view", crmhandler.ViewContract)
+		api.POST("/contracts/:id/sign", crmhandler.SignContract)
+		api.POST("/contracts/:id/refuse", crmhandler.RefuseContract)
+		api.GET("/contracts/:id/events", crmhandler.ListContractEvents)
+		api.GET("/contracts/by-budget/:budgetId", crmhandler.GetContractByBudget)
 	}
 
 	port := os.Getenv("PORT")
