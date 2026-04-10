@@ -35,6 +35,8 @@ func main() {
 		api.POST("/quotes", corehandler.CreateQuote)
 		api.PUT("/quotes/:id", corehandler.UpdateQuote)
 		api.DELETE("/quotes/:id", corehandler.DeleteQuote)
+		api.GET("/quotes/:id/versions", corehandler.ListQuoteVersions)
+		api.POST("/quotes/:id/versions/:versionId/activate", corehandler.ActivateQuoteVersion)
 
 		api.GET("/templates", corehandler.ListTemplates)
 		api.GET("/templates/:id", corehandler.GetTemplate)

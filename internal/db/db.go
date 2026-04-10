@@ -27,6 +27,7 @@ func Connect() {
 	err = DB.AutoMigrate(
 		&model.User{},
 		&model.Quote{},
+		&model.QuoteVersion{},
 		&model.Template{},
 		&model.Settings{},
 		&model.Client{},
